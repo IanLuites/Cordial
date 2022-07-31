@@ -30,13 +30,6 @@ defmodule Cordial.Schema do
     end
   end
 
-  @order [
-    Cordial.Definition.Package,
-    Cordial.Definition.Enum,
-    Cordial.Definition.Message,
-    Cordial.Definition.Service
-  ]
-
   defmacro __before_compile__(env) do
     opts = [
       cwd: Module.get_attribute(__CALLER__.module, :cordial_schema_dir)
