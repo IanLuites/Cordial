@@ -1,4 +1,4 @@
-# Cordial
+# <img src="./logo.png" alt="Cordial Logo" style="height:1em;" /> Cordial
 
 Elixir RPC framework.
 
