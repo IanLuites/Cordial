@@ -28,7 +28,7 @@ defmodule Cordial.HTTP.Router do
     root = Elixir
 
     root_router =
-      if router.name == config.http.name do
+      if router.name == config.http.module do
         quote do
           plug(Plug.Parsers,
             parsers: [:json],
