@@ -4,6 +4,13 @@ Elixir RPC framework.
 
 [Examples](./examples) | [Guides](./guides)
 
+---
+
+> ⚠️ This repo is currently undergoing rapid changes, while experimental code is imported, removed, and cleaned up.  
+> ⚠️ Not ready for use, yet.
+
+---
+
 ## Roadmap
 
 The following functionality is planned or under development:
