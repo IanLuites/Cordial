@@ -44,19 +44,11 @@ defmodule Cordial.New.MixProject do
 
   def application do
     [
-      extra_applications: [:eex, :logger]
+      extra_applications: [:eex, :inets, :logger, :ssl]
     ]
   end
 
   defp deps do
-    mode =
-      if System.get_env("CORDIAL_LOCAL_DEPENDENCIES", "false") == "true",
-        do: [path: "../cordial"],
-        else: [github: @scm_project, sparse: "Cordial"]
-
-    [
-      {:cordial, @version, mode},
-      {:heimdallr, ">= 0.0.0", only: [:dev, :test]}
-    ]
+    []
   end
 end
