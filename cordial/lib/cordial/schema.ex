@@ -44,20 +44,30 @@ defmodule Cordial.Schema do
          |> Enum.map(&{&1, Resource.module(&1, root), Resource.dependencies(&1, :compile, root)})
          |> dependency_sort() do
       {:ok, resources} ->
-        Enum.flat_map(resources, fn {v = %t{}, _, _} ->
-          external_resources =
-            if t == Cordial.Definition.Package do
-              Enum.map(v.sources, fn %{local: local} ->
-                quote do
-                  @external_resource unquote(local)
-                end
-              end)
-            else
-              []
-            end
+        defines =
+          quote do
+            @doc false
+            @spec resources :: [module]
+            def resources, do: unquote(Enum.map(resources, &elem(&1, 1)))
+          end
 
-          [Resource.to_module(v, root) | external_resources]
-        end)
+        [
+          defines
+          | Enum.flat_map(resources, fn {v = %t{}, _, _} ->
+              external_resources =
+                if t == Cordial.Definition.Package do
+                  Enum.map(v.sources, fn %{local: local} ->
+                    quote do
+                      @external_resource unquote(local)
+                    end
+                  end)
+                else
+                  []
+                end
+
+              [Resource.to_module(v, root) | external_resources]
+            end)
+        ]
 
       {:error, failed, succeeded} ->
         errors =
