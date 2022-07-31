@@ -91,10 +91,7 @@ defmodule Cordial.Schema do
         """
 
         IO.puts(description)
-        # raise CompileError, file: env.file, description: description
-        quote do
-          def debug, do: unquote(Macro.escape(%{succeeded: succeeded, failed: failed}))
-        end
+        raise CompileError, file: env.file, description: description
     end
   end
 
