@@ -33,6 +33,7 @@ defmodule Cordial.New.MixProject do
       files: ~W(
         mix.exs
         .formatter.exs
+        priv
         lib
         README.md
         CHANGELOG.md
