@@ -42,7 +42,6 @@ defmodule Mix.Tasks.Cordial.New do
     http: :string,
     client: :boolean,
     server: :boolean,
-    install: :boolean,
     module: :string,
     prefix: :string,
     proto: :keep,
@@ -63,6 +62,8 @@ defmodule Mix.Tasks.Cordial.New do
 
   def run(argv) do
     elixir_version_check!()
+    hex_available_check!()
+    rebar_available_check!()
 
     case parse_opts(argv) do
       {_opts, []} ->
@@ -105,6 +106,7 @@ defmodule Mix.Tasks.Cordial.New do
           client?: client?,
           server?: server?,
           grpc?: grpc?,
+          verbose?: Keyword.get(opts, :verbose, false),
           prefix: prefix,
           server_dir: server? && if(client?, do: Path.join(dir, "server"), else: dir),
           server_app: server? && if(client?, do: :"#{app}_server", else: app),
@@ -113,7 +115,8 @@ defmodule Mix.Tasks.Cordial.New do
           client_app: client? && app,
           client_module: client? && root_mod,
           proto: listify(Keyword.get(opts, :proto, [])) |> Enum.map(&resolve/1),
-          services: []
+          services: [],
+          resources: %{}
         }
 
         Cordial.New.create(config)
@@ -141,9 +144,6 @@ defmodule Mix.Tasks.Cordial.New do
   defp listify(value)
   defp listify(values) when is_list(values), do: values
   defp listify(value), do: [value]
-
-  # defp hex_available?, do: Code.ensure_loaded?(Hex)
-  # defp rebar_available?, do: Mix.Rebar.rebar_cmd(:rebar3)
 
   defp check_app_name!(name, from_app_flag) do
     unless to_string(name) =~ Regex.recompile!(~r/^[a-z][\w_]*$/) do
@@ -200,6 +200,18 @@ defmodule Mix.Tasks.Cordial.New do
         "Cordial v#{@version} requires at least Elixir v1.12.\n " <>
           "You have #{System.version()}. Please update accordingly"
       )
+    end
+  end
+
+  defp hex_available_check! do
+    unless Code.ensure_loaded?(Hex) do
+      Mix.raise("Cordial v#{@version} requires at Hex to be available.")
+    end
+  end
+
+  defp rebar_available_check! do
+    unless Mix.Rebar.rebar_cmd(:rebar3) do
+      Mix.raise("Cordial v#{@version} requires at rebar[3] to be available.")
     end
   end
 end

@@ -19,13 +19,19 @@ defmodule Cordial.New.Template do
       |> Enum.map(& &1.name)
 
     quote do
-      import Cordial.Definition.Resource, only: [module: 2]
-
       def render(target, var!(assigns)) when is_list(var!(assigns)) do
         Enum.each(unquote(templates), &render(&1, target, var!(assigns)))
       end
 
       unquote(Enum.map(files, &renderer/1))
+
+      defp module({:type, _, path}, root),
+        do: Module.concat([root | path |> String.split(".") |> Enum.map(&Macro.camelize/1)])
+
+      defp module(a, b) do
+        IO.inspect({a, b})
+        X
+      end
 
       @spec filename(module | String.t()) :: String.t()
       defp filename(module) when is_atom(module), do: module |> dirs() |> List.last()
