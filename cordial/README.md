@@ -1,0 +1,3 @@
+# Cordial
+
+Elixir RPC framework.
