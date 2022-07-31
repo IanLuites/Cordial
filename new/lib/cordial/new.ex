@@ -36,7 +36,8 @@ defmodule Cordial.New do
     )
 
     Server.render(config.server_dir, assigns)
-    fetch_deps(config)
+    fetch_deps!(config)
+    compile!(config)
   end
 
   @spec priv(config :: map) :: Path.t()
@@ -44,11 +45,18 @@ defmodule Cordial.New do
   defp priv(%{client?: true, client_dir: dir}), do: Path.join(dir, "priv")
   defp priv(%{client?: false, server_dir: dir}), do: Path.join(dir, "priv")
 
-  defp fetch_deps(config) do
+  defp fetch_deps!(config) do
     cmd = &Mix.shell().cmd/2
 
     config.client? && cmd.("mix deps.get", cd: config.client_dir, quiet: not config.verbose?)
     config.server? && cmd.("mix deps.get", cd: config.server_dir, quiet: not config.verbose?)
+  end
+
+  defp compile!(config) do
+    cmd = &Mix.shell().cmd/2
+
+    config.client? && cmd.("mix compile", cd: config.client_dir, quiet: not config.verbose?)
+    config.server? && cmd.("mix compile", cd: config.server_dir, quiet: not config.verbose?)
   end
 
   defp read_schema(config) do
