@@ -21,8 +21,14 @@ The following functionality is planned or under development:
 - [ ] Server
   - [ ] gRPC
   - [ ] HTTP
+    - [x] Basic support
+    - [ ] Enum support
+    - [ ] Google Extension Support
 - [ ] Schema definitions
   - [ ] Protocol buffer (inc. gRPC)
+    - [x] Basic support
+    - [x] Enum support
+    - [ ] Google Extension Support
   - [ ] OpenAPI 3
 - [ ] `mix cordial.new` project setup command.
 - [ ] Add examples
